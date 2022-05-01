@@ -1,10 +1,71 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+//Importing hook from redux
+import { useDispatch } from "react-redux";
+
+//Importing material components
+import { Container, AppBar, Typography, Grow, Grid } from "@material-ui/core";
+
+//Importing custom components
+import { getPosts } from "./actions/posts.js";
+import Posts from "./components/Posts/Posts.js";
+import Form from "./components/Form/Form.js";
+
+//Adding styles
+import useStyles from "./styles.js";
+
+//Importing image
+import memories from "./images/memories.png";
 
 const App = () => {
+  const classes = useStyles();
+
+  //Defining dispatch
+  const dispatch = useDispatch();
+
+  //Here getPosts is the action
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
+
   return (
-    <div>
-      <h1>App</h1>
-    </div>
+    //Container to center everything
+    //Typography in material stand for any textual element but it gives us a nice looking font
+    //Grow provides some simple animations
+    //Grid contains a container and its item
+    //Each item has 12 columns which can be specified for different devices
+    //xs is very small and sm is small devices
+
+    <Container maxWidth="lg">
+      <AppBar className={classes.appBar} position="static" color="inherit">
+        <Typography className={classes.heading} variant="h2" align="center">
+          My Story
+        </Typography>
+        <img
+          className={classes.image}
+          src={memories}
+          alt="memories"
+          height="60"
+        />
+      </AppBar>
+      <Grow in>
+        <Container>
+          <Grid
+            container
+            justifyContent="space-between"
+            alignItems="stretch"
+            spacing={3}
+          >
+            <Grid item xs={12} sm={7}>
+              <Posts />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Form />
+            </Grid>
+          </Grid>
+        </Container>
+      </Grow>
+    </Container>
   );
 };
 

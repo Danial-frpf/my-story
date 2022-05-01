@@ -10,16 +10,17 @@ import postRouter from "./routes/posts.js";
 //Initializing express app instance
 const app = express();
 
-//Using express middle ware to connect router with application
-//We added a prefix "/posts" for all routes
-app.use("/posts", postRouter);
-
 //Setting up body-parser to properly send request
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 //Setting cors for usage
+//Cors should be initiated before router
 app.use(cors());
+
+//Using express middle ware to connect router with application
+//We added a prefix "/posts" for all routes
+app.use("/posts", postRouter);
 
 //Creating connection to mongodb by copying the link got from "connect application" and providing username and password of the created user in placeholders
 const CONNECTION_URL =
