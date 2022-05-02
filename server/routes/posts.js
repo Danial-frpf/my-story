@@ -11,7 +11,7 @@ const router = express.Router();
 //Adding routes to router
 //The callback function will be executed when someone visits "/" at PORT 5000
 //Each callback function will have request and response
-router.get("/createPost", createPost);
-router.get("/getPosts", getPosts);
+router.get("/", getPosts);
+router.post("/", createPost);
 
 export default router;

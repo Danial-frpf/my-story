@@ -5,8 +5,7 @@ import axios from "axios";
 const url = "http://localhost:5000/posts";
 
 //Function connecting server with client using axios
-export const fetchPosts = () => axios.get(url + "/getPosts");
+export const fetchPosts = () => axios.get(url);
 //Need both url and the data we are sending
 //The connector was used in action file
-export const createPost = (newPost) =>
-  axios.post(url + "/createPost", { newPost });
+export const createPost = (newPost) => axios.post(url, newPost);
