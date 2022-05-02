@@ -23,7 +23,7 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   //Mock variable
-  const isSignUp = false;
+  const [isSignUp, setIsSignUp] = useState(false);
 
   //Form handler
   const handleSubmit = (e) => {};
@@ -32,6 +32,11 @@ const Auth = () => {
 
   const handleShowPassword = () =>
     setShowPassword((prevShowPassword) => !prevShowPassword);
+
+  const switchMode = () => {
+    setIsSignUp((prevIsSignUp) => !prevIsSignUp);
+    setShowPassword(false);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -91,6 +96,15 @@ const Auth = () => {
           >
             {isSignUp ? "Sign Up" : "Sign In"}
           </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Button onClick={switchMode}>
+                {isSignUp
+                  ? "Already have an account? Sign In"
+                  : "Don't have an account? Sign Up"}
+              </Button>
+            </Grid>
+          </Grid>
         </form>
       </Paper>
     </Container>
