@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //Other react dependencies
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 //Importing material components
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
@@ -11,10 +11,15 @@ import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import useStyles from "./styles.js";
 
 //Custom actions
-import { createPost } from "../../actions/posts.js";
+import { createPost, updatePost } from "../../actions/posts.js";
 
-const Form = () => {
+const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
+
+  //Getting the specific post from the store
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((p) => p._id === currentId) : null
+  );
 
   //Setting useState/postData according to the mongoose schema
   const [postData, setPostData] = useState({
@@ -25,6 +30,12 @@ const Form = () => {
     selectedFile: "",
   });
 
+  //useEffect checking for changes in post
+  //Its updates the input fields
+  useEffect(() => {
+    if (post) setPostData(post);
+  }, [post]);
+
   //This allows us to dispatch actions
   //Here we want to dispatch it on handle submit
   const dispatch = useDispatch();
@@ -34,10 +45,25 @@ const Form = () => {
     //Preventing refresh
     e.preventDefault();
 
-    //Sending data
-    dispatch(createPost(postData));
+    //If we have a an id than update
+    if (currentId) {
+      dispatch(updatePost(currentId, postData));
+    } else {
+      //Sending data
+      dispatch(createPost(postData));
+    }
+    clear();
   };
-  const clear = (e) => {};
+  const clear = (e) => {
+    setCurrentId(null);
+    setPostData({
+      creator: "",
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
+    });
+  };
 
   return (
     <Paper className={classes.paper}>
@@ -47,7 +73,9 @@ const Form = () => {
         noValidate
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6">Creating a Story</Typography>
+        <Typography variant="h6">
+          {currentId ? "Editing" : "Creating"} a Story
+        </Typography>
         <TextField
           name="creator"
           variant="outlined"
@@ -82,7 +110,9 @@ const Form = () => {
           label="Tags"
           fullWidth
           value={postData.tags}
-          onChange={(e) => setPostData({ ...postData, tags: e.target.value })}
+          onChange={(e) =>
+            setPostData({ ...postData, tags: e.target.value.split(",") })
+          }
         ></TextField>
         <div className={classes.fileInput}>
           <FileBase

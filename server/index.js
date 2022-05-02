@@ -3,12 +3,14 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
 
 //Importing router
 import postRouter from "./routes/posts.js";
 
 //Initializing express app instance
 const app = express();
+dotenv.config();
 
 //Setting up body-parser to properly send request
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -23,9 +25,7 @@ app.use(cors());
 app.use("/posts", postRouter);
 
 //Creating connection to mongodb by copying the link got from "connect application" and providing username and password of the created user in placeholders
-const CONNECTION_URL =
-  "mongodb+srv://danialfrpf:2ndratemongodbuser@cluster0.kcysz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-
+//It is now in .env file
 //Later on we are going to change this
 const PORT = process.env.PORT || 5000;
 
@@ -33,7 +33,7 @@ const PORT = process.env.PORT || 5000;
 //Removed options as they are no longer necessary
 //Because its a promise we need to pass then that will run the passed function on success else we wil console the error using catch
 mongoose
-  .connect(CONNECTION_URL)
+  .connect(process.env.CONNECTION_URL)
   .then(() =>
     app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
   )

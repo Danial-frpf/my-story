@@ -1,6 +1,7 @@
 //Inside it we are gonna control all the handlers/logic for our routes
 
 //Import mongoose model
+import mongoose from "mongoose";
 import PostMessage from "../models/postMessage.js";
 
 //We use async because we used await
@@ -35,4 +36,56 @@ export const createPost = async (req, res) => {
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
+};
+
+export const updatePost = async (req, res) => {
+  //Because we specified it as id in url anything in its place will become id
+  //We access that id from req.params and assign it to _id
+  //id will be assigned to _id
+  const { id: _id } = req.params;
+  const post = req.body;
+
+  //Checking whether the id is valid or not
+  if (!mongoose.Types.ObjectId.isValid(_id))
+    return res.status(404).send("No post with Id");
+
+  //New = true return us the post
+  //We use {...post, _id} instead of post so that it gets the same id back
+  const updatedPost = await PostMessage.findByIdAndUpdate(
+    _id,
+    { ...post, _id },
+    {
+      new: true,
+    }
+  );
+
+  //Send the updated post back to client
+  res.json(updatedPost);
+};
+
+export const deletePost = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send("No post with Id");
+
+  await PostMessage.findByIdAndRemove(id);
+
+  res.json({ message: "Post deleted successfully" });
+};
+
+export const likePost = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send("No post with Id");
+
+  const post = await PostMessage.findById(id);
+  const updatedPost = await PostMessage.findByIdAndUpdate(
+    id,
+    { likeCount: post.likeCount + 1 },
+    { new: true }
+  );
+
+  res.json(updatedPost);
 };

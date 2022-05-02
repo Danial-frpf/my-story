@@ -3,6 +3,9 @@ import ReactDom from "react-dom";
 
 import App from "./App";
 
+//CSS
+import "./index.css";
+
 //Implementing redux
 //Provider keeps track of the store and allow us to access it from anywhere
 import { Provider } from "react-redux";
