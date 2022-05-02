@@ -13,9 +13,6 @@ import useStyles from "./styles.js";
 //Custom actions
 import { createPost } from "../../actions/posts.js";
 
-//Extra
-import { fetchPosts } from "../../api/index.js";
-
 const Form = () => {
   const classes = useStyles();
 
@@ -40,10 +37,7 @@ const Form = () => {
     //Sending data
     dispatch(createPost(postData));
   };
-  const clear = (e) => {
-    const data = fetchPosts();
-    console.log(data);
-  };
+  const clear = (e) => {};
 
   return (
     <Paper className={classes.paper}>
