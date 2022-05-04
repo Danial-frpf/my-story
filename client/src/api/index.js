@@ -8,15 +8,15 @@ const API = axios.create({ baseURL: "http://localhost:5000" });
 //It needs a call back function
 //We need it to send the token to our backend for auth
 API.interceptors.request.use((req) => {
-  if (localStorage.getItem("profile")) {
-    //We need to add Bearer before sending the token
-    req.headers.authorization = `Bearer ${
-      JSON.parse(localStorage.getItem("profile")).token
-    }`;
-  }
+    if (localStorage.getItem("profile")) {
+        //We need to add Bearer before sending the token
+        req.headers.authorization = `Bearer ${
+            JSON.parse(localStorage.getItem("profile")).token
+        }`;
+    }
 
-  //Yes it will add the above in all our requests
-  return req;
+    //Yes it will add the above in all our requests
+    return req;
 });
 
 //URL pointing to our backend route
@@ -27,13 +27,21 @@ API.interceptors.request.use((req) => {
 
 //Function connecting server with client using axios
 export const fetchPosts = () => API.get("/posts");
+
+//For searches
+export const fetchPostsBySearch = (searchQuery) =>
+    API.get(
+        `/posts/search?searchQuery=${searchQuery.search || "none"}&tags=${
+            searchQuery.tags
+        }`
+    );
 //Need both url and the data we are sending
 //The connector was used in action file
 export const createPost = (newPost) => API.post("/posts", newPost);
 
 //
 export const updatePost = (id, updatedPost) =>
-  API.patch(`/posts/${id}`, updatedPost);
+    API.patch(`/posts/${id}`, updatedPost);
 
 export const deletePost = (id) => API.delete(`/posts/${id}`);
 
