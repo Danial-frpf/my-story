@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { GoogleLogin } from "react-google-login";
+import { useHistory } from "react-router-dom";
 
 //Material components
 import {
@@ -11,24 +13,58 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
+//Redux stuff
+import { useDispatch } from "react-redux";
+
 //Custom component
 import Input from "./Input.js";
+import Icon from "./icon.js";
+import { signIn, signUp } from "../../actions/auth.js";
 
 //Adding styles
 import useStyles from "./styles.js";
 
+//Form fields structure
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
 const Auth = () => {
   const classes = useStyles();
+
+  const history = useHistory();
 
   const [showPassword, setShowPassword] = useState(false);
 
   //Mock variable
   const [isSignUp, setIsSignUp] = useState(false);
 
-  //Form handler
-  const handleSubmit = (e) => {};
+  //Creating Form data element
+  const [formData, setFormData] = useState(initialState);
 
-  const handleChange = (e) => {};
+  //Accessing dispatch
+  const dispatch = useDispatch();
+
+  //Form handler
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isSignUp) {
+      dispatch(signUp(formData, history));
+    } else {
+      dispatch(signIn(formData, history));
+    }
+  };
+
+  const handleChange = (e) => {
+    //Because our field structure and input field names are exactly the same
+    //We use the following to spread the value to its specific name
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleShowPassword = () =>
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -36,6 +72,25 @@ const Auth = () => {
   const switchMode = () => {
     setIsSignUp((prevIsSignUp) => !prevIsSignUp);
     setShowPassword(false);
+  };
+
+  //Yes it gives us access to a complete response
+  const googleSuccess = async (res) => {
+    //Note we use question mark here because this will allow us to deal with errors like cannot get property etc
+    //With this you will only get undefined
+    //It is called optional chaining operator
+    const result = res?.profileObj;
+    const token = res?.tokenId;
+
+    try {
+      dispatch({ type: "AUTH", data: { result, token } });
+      history.push("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const googleFailure = () => {
+    console.log("Google sign in failed. Try again later");
   };
 
   return (
@@ -57,8 +112,8 @@ const Auth = () => {
                   half
                 />
                 <Input
-                  name="firstName"
-                  label="First Name"
+                  name="lastName"
+                  label="Last Name"
                   handleChange={handleChange}
                   autoFocus
                   half
@@ -87,6 +142,7 @@ const Auth = () => {
               />
             )}
           </Grid>
+
           <Button
             className={classes.submit}
             type="submit"
@@ -96,6 +152,26 @@ const Auth = () => {
           >
             {isSignUp ? "Sign Up" : "Sign In"}
           </Button>
+
+          <GoogleLogin
+            clientId="1044575846112-ltftsk9s2mhl39gkj98d9rlr9fjq0pg8.apps.googleusercontent.com"
+            render={(renderProps) => (
+              <Button
+                className={classes.googleButton}
+                color="primary"
+                variant="contained"
+                fullWidth
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                startIcon={<Icon />}
+              >
+                Google Sign In
+              </Button>
+            )}
+            onSuccess={googleSuccess}
+            onFailure={googleFailure}
+            cookiePolicy="single_host_origin"
+          />
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>

@@ -16,6 +16,9 @@ import { createPost, updatePost } from "../../actions/posts.js";
 const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
 
+  //Getting user from cache
+  const user = JSON.parse(localStorage.getItem("profile"));
+
   //Getting the specific post from the store
   const post = useSelector((state) =>
     currentId ? state.posts.find((p) => p._id === currentId) : null
@@ -23,7 +26,6 @@ const Form = ({ currentId, setCurrentId }) => {
 
   //Setting useState/postData according to the mongoose schema
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
@@ -47,23 +49,34 @@ const Form = ({ currentId, setCurrentId }) => {
 
     //If we have a an id than update
     if (currentId) {
-      dispatch(updatePost(currentId, postData));
+      dispatch(
+        updatePost(currentId, { ...postData, name: user?.result?.name })
+      );
     } else {
       //Sending data
-      dispatch(createPost(postData));
+      dispatch(createPost({ ...postData, name: user?.result?.name }));
     }
     clear();
   };
   const clear = (e) => {
     setCurrentId(null);
     setPostData({
-      creator: "",
       title: "",
       message: "",
       tags: "",
       selectedFile: "",
     });
   };
+
+  if (!user?.result?.name) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="h6" align="center">
+          Please Sign In to create your own stories and like other stories.
+        </Typography>
+      </Paper>
+    );
+  }
 
   return (
     <Paper className={classes.paper}>
@@ -77,23 +90,13 @@ const Form = ({ currentId, setCurrentId }) => {
           {currentId ? "Editing" : "Creating"} a Story
         </Typography>
         <TextField
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          fullWidth
-          value={postData.creator}
-          onChange={(e) =>
-            setPostData({ ...postData, creator: e.target.value })
-          }
-        ></TextField>
-        <TextField
           name="title"
           variant="outlined"
           label="Title"
           fullWidth
           value={postData.title}
           onChange={(e) => setPostData({ ...postData, title: e.target.value })}
-        ></TextField>
+        />
         <TextField
           name="message"
           variant="outlined"
@@ -105,17 +108,17 @@ const Form = ({ currentId, setCurrentId }) => {
           onChange={(e) =>
             setPostData({ ...postData, message: e.target.value })
           }
-        ></TextField>
+        />
         <TextField
           name="tags"
           variant="outlined"
-          label="Tags (comma separated)"
+          label="Tags (pretty,cute,small,...)"
           fullWidth
           value={postData.tags}
           onChange={(e) =>
             setPostData({ ...postData, tags: e.target.value.split(",") })
           }
-        ></TextField>
+        />
         <div className={classes.fileInput}>
           <FileBase
             type="file"

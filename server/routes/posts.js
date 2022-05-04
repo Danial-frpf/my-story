@@ -11,6 +11,8 @@ import {
   likePost,
 } from "../controllers/posts.js";
 
+import auth from "../middleware/auth.js";
+
 //Initializing my router
 const router = express.Router();
 
@@ -18,12 +20,13 @@ const router = express.Router();
 //The callback function will be executed when someone visits "/" at PORT 5000
 //Each callback function will have request and response
 router.get("/", getPosts);
-router.post("/", createPost);
+//As the auth is before our action any changes made to its req and res will also be passed down to the req and res of action
+router.post("/", auth, createPost);
 //Patch is used for updating
 // here : represent dynamic (changeable)
-router.patch("/:id", updatePost);
-router.delete("/:id", deletePost);
+router.patch("/:id", auth, updatePost);
+router.delete("/:id", auth, deletePost);
 //Liking something is updating it
-router.patch("/:id/likePost", likePost);
+router.patch("/:id/likePost", auth, likePost);
 
 export default router;

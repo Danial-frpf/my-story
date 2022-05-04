@@ -6,7 +6,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 //Importing router
-import postRouter from "./routes/posts.js";
+import postRoutes from "./routes/posts.js";
+import userRoutes from "./routes/users.js";
 
 //Initializing express app instance
 const app = express();
@@ -22,7 +23,10 @@ app.use(cors());
 
 //Using express middle ware to connect router with application
 //We added a prefix "/posts" for all routes
-app.use("/posts", postRouter);
+app.use("/posts", postRoutes);
+
+//Auth Routes
+app.use("/user", userRoutes);
 
 //Creating connection to mongodb by copying the link got from "connect application" and providing username and password of the created user in placeholders
 //It is now in .env file
