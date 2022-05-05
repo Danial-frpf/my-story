@@ -17,9 +17,11 @@ const Posts = ({ setCurrentId }) => {
 
     //useSelector takes a callback function and pass it the whole store/state
     //if you go to reducers index.js you can see that we have already specify posts
-    const posts = useSelector((state) => state.posts);
+    const { posts, isLoading } = useSelector((state) => state.posts);
 
-    return !posts.length ? (
+    if (!posts.length && !isLoading) return "No posts";
+
+    return isLoading ? (
         <CircularProgress />
     ) : (
         <Grid

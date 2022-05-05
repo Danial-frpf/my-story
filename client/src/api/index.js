@@ -26,7 +26,9 @@ API.interceptors.request.use((req) => {
 //export const fetchPosts = () => axios.get(url);
 
 //Function connecting server with client using axios
-export const fetchPosts = () => API.get("/posts");
+export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
+
+export const fetchPost = (id) => API.get(`/posts/${id}`);
 
 //For searches
 export const fetchPostsBySearch = (searchQuery) =>

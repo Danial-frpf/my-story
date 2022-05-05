@@ -5,6 +5,7 @@ import express from "express";
 //As we didn't used default we can use { some }
 import {
     getPosts,
+    getPost,
     getPostsBySearch,
     createPost,
     updatePost,
@@ -22,6 +23,8 @@ const router = express.Router();
 //Each callback function will have request and response
 router.get("/", getPosts);
 router.get("/search", getPostsBySearch);
+//Swapping there positions fixed the problem 404
+router.get("/:id", getPost);
 //As the auth is before our action any changes made to its req and res will also be passed down to the req and res of action
 router.post("/", auth, createPost);
 //Patch is used for updating

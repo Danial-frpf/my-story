@@ -47,11 +47,6 @@ const Home = () => {
     //Defining dispatch
     const dispatch = useDispatch();
 
-    //Here getPosts is the action
-    useEffect(() => {
-        dispatch(getPosts());
-    }, [dispatch]);
-
     //Search on enter
     const handleKeyPress = (e) => {
         //keycode 13 means enter key
@@ -129,7 +124,7 @@ const Home = () => {
                             setCurrentId={setCurrentId}
                         />
                         <Paper elevation={6}>
-                            <Pagination />
+                            <Pagination page={page} />
                         </Paper>
                     </Grid>
                 </Grid>
