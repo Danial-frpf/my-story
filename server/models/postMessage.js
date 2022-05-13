@@ -4,20 +4,21 @@ import mongoose from "mongoose";
 //Creating mongoose schema
 //A schema is formate that your message/document must follow
 const postSchema = mongoose.Schema({
-  title: String,
-  creator: String,
-  message: String,
-  name: String,
-  tags: [String], //Array of strings
-  selectedFile: String,
-  likes: {
-    type: [String],
-    default: [],
-  },
-  createdAt: {
-    type: Date,
-    default: new Date(),
-  },
+    title: String,
+    creator: String,
+    message: String,
+    name: String,
+    tags: [String], //Array of strings
+    selectedFile: String,
+    likes: {
+        type: [String],
+        default: [],
+    },
+    comments: { type: [String], default: [] },
+    createdAt: {
+        type: Date,
+        default: new Date(),
+    },
 });
 
 //Converting schema into a model

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 
@@ -9,24 +9,28 @@ import {
     Paper,
     Typography,
     CircularProgress,
+    Grid,
+    Card,
+    CardActionArea,
+    CardContent,
 } from "@material-ui/core";
 
 import useStyles from "./styles.js";
 import { getPost, getPostsBySearch } from "../../actions/posts";
+import CommentSection from "./CommentSection/CommentSection.js";
 
 const PostDetails = () => {
     const classes = useStyles();
-
     const { post, posts, isLoading } = useSelector((state) => state.posts);
     const dispatch = useDispatch();
     const history = useHistory();
     const { id } = useParams();
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         dispatch(getPost(id));
     }, [id, dispatch]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (post) {
             dispatch(
                 getPostsBySearch({ search: "none", tags: post.tags.join(",") })
@@ -50,106 +54,141 @@ const PostDetails = () => {
 
     return (
         <Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
-            <div className={classes.card}>
-                <div className={classes.section}>
-                    <Typography variant="h3" component="h2">
-                        {post.title}
-                    </Typography>
-                    <Typography
-                        gutterBottom
-                        variant="h6"
-                        color="textSecondary"
-                        component="h2"
-                    >
-                        {post.tags.map((tag) => `#${tag} `)}
-                    </Typography>
-                    <Typography gutterBottom variant="body1" component="p">
-                        {post.message}
-                    </Typography>
-                    <Typography variant="h6">
-                        Created by: {post.name}
-                    </Typography>
-                    <Typography variant="body1">
-                        {moment(post.createdAt).fromNow()}
-                    </Typography>
-                    <Divider style={{ margin: "20px 0" }} />
-                    <Typography variant="body1">
-                        <strong>Realtime Chat - coming soon!</strong>
-                    </Typography>
-                    <Divider style={{ margin: "20px 0" }} />
-                    <Typography variant="body1">
-                        <strong>Comments - coming soon!</strong>
-                    </Typography>
-                    <Divider style={{ margin: "20px 0" }} />
-                </div>
-                <div className={classes.imageSection}>
-                    <img
-                        className={classes.media}
-                        src={
-                            post.selectedFile ||
-                            "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"
-                        }
-                        alt={post.title}
-                    />
-                </div>
-            </div>
+            <Grid container spacing={1}>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                    <div className={classes.section}>
+                        <div>
+                            <Typography variant="h3" component="h2">
+                                {post.title}
+                            </Typography>
+                            <Typography
+                                gutterBottom
+                                variant="h6"
+                                color="textSecondary"
+                                component="h2"
+                            >
+                                {post.tags.map((tag) => `#${tag} `)}
+                            </Typography>
+                            <Divider style={{ margin: "20px 0" }} />
+                        </div>
+                        <div style={{ height: "100%" }}>
+                            <Typography
+                                gutterBottom
+                                variant="body1"
+                                component="p"
+                            >
+                                {post.message}
+                            </Typography>
+                        </div>
+                        <div>
+                            <Typography variant="h6">
+                                Created by: {post.name}
+                            </Typography>
+                            <Typography variant="body1">
+                                {moment(post.createdAt).fromNow()}
+                            </Typography>
+                        </div>
+                    </div>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                    <div>
+                        <img
+                            className={classes.media}
+                            src={
+                                post.selectedFile ||
+                                "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"
+                            }
+                            alt={post.title}
+                        />
+                    </div>
+                </Grid>
+            </Grid>
+            <Divider style={{ margin: "20px 0" }} />
             {/* Recommended post logic */}
-            {recommendedPosts.length && (
-                <div className={classes.section}>
-                    <Typography gutterBottom variation="h5">
-                        You might also like:
-                    </Typography>
-                    <Divider />
-                    <div className={classes.recommendedPosts}>
+            {0 < recommendedPosts.length && (
+                <div>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h5" color="primary">
+                                You might also like:
+                            </Typography>
+                        </CardContent>
+                    </Card>
+
+                    <Divider style={{ margin: "20px 0" }} />
+
+                    <Grid container spacing={1}>
                         {recommendedPosts.map(
                             ({
                                 title,
-                                message,
+                                tags,
                                 name,
                                 likes,
                                 selectedFile,
                                 _id,
                             }) => (
-                                <div
-                                    style={{
-                                        margin: "20px",
-                                        cursor: "pointer",
-                                    }}
-                                    onClick={() => openPost(_id)}
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={6}
+                                    md={3}
+                                    lg={3}
+                                    xl={3}
                                     key={_id}
                                 >
-                                    <Typography gutterBottom variant="h6">
-                                        {title}
-                                    </Typography>
-                                    <Typography
-                                        gutterBottom
-                                        variant="subtitle2"
-                                    >
-                                        {name}
-                                    </Typography>
-                                    <Typography
-                                        gutterBottom
-                                        variant="subtitle2"
-                                    >
-                                        {message}
-                                    </Typography>
-                                    <Typography
-                                        gutterBottom
-                                        variant="subtitle2"
-                                    >
-                                        Likes: {likes.length}
-                                    </Typography>
-                                    <img
-                                        src={selectedFile}
-                                        width="200px"
-                                        alt="Recommendation images"
-                                    />
-                                </div>
+                                    <Card raised elevation={6}>
+                                        <CardActionArea
+                                            onClick={() => openPost(_id)}
+                                        >
+                                            <CardContent>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant="h5"
+                                                >
+                                                    {title}
+                                                </Typography>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant="h6"
+                                                >
+                                                    {name}
+                                                </Typography>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant="subtitle2"
+                                                    color="textSecondary"
+                                                >
+                                                    {post.tags.map(
+                                                        (tag) => `#${tag} `
+                                                    )}
+                                                </Typography>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant="subtitle2"
+                                                    color="primary"
+                                                >
+                                                    Likes: {likes.length}
+                                                </Typography>
+                                                <img
+                                                    src={selectedFile}
+                                                    style={{
+                                                        objectFit: "cover",
+                                                        height: "25vh",
+                                                    }}
+                                                    width="100%"
+                                                    alt="Recommendation images"
+                                                />
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                </Grid>
                             )
                         )}
-                    </div>
+                    </Grid>
                 </div>
             )}
+            <Divider style={{ margin: "20px 0" }} />
+            <CommentSection post={post} />
         </Paper>
     );
 };

@@ -17,7 +17,6 @@ export default makeStyles({
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        borderRadius: "15px",
         height: "100%",
         position: "relative",
     },
@@ -50,7 +49,9 @@ export default makeStyles({
         justifyContent: "space-between",
     },
     cardAction: {
-        display: "block",
-        textAlign: "initial",
+        "&:hover $focusHighlight": {
+            opacity: 1,
+        },
     },
+    focusHighlight: {},
 });

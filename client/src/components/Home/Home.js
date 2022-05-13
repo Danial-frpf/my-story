@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
 //Adding material components
@@ -10,7 +10,6 @@ import {
     AppBar,
     TextField,
     Button,
-    Chip,
 } from "@material-ui/core";
 import ChipInput from "material-ui-chip-input";
 
@@ -18,7 +17,7 @@ import ChipInput from "material-ui-chip-input";
 import { useDispatch } from "react-redux";
 
 //Custom components
-import { getPosts, getPostsBySearch } from "../../actions/posts.js";
+import { getPostsBySearch } from "../../actions/posts.js";
 import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
 import Pagination from "../Pagination.jsx";
@@ -37,7 +36,6 @@ const Home = () => {
     const query = useQuery();
     const history = useHistory();
     const page = query.get("page") || 1;
-    const searchQuery = query.get("searchQuery");
     const [tags, setTags] = useState([]);
     const [search, setSearch] = useState("");
 
@@ -84,10 +82,10 @@ const Home = () => {
                     alignItems="stretch"
                     spacing={3}
                 >
-                    <Grid item xs={12} sm={6} md={9}>
+                    <Grid item xs={12} sm={12} md={9}>
                         <Posts setCurrentId={setCurrentId} />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={12} md={3}>
                         <AppBar
                             className={classes.appBarSearch}
                             position="static"

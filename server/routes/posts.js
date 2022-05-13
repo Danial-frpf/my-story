@@ -11,6 +11,7 @@ import {
     updatePost,
     deletePost,
     likePost,
+    postComment,
 } from "../controllers/posts.js";
 
 import auth from "../middleware/auth.js";
@@ -33,5 +34,6 @@ router.patch("/:id", auth, updatePost);
 router.delete("/:id", auth, deletePost);
 //Liking something is updating it
 router.patch("/:id/likePost", auth, likePost);
+router.post("/:id/postComment", auth, postComment);
 
 export default router;
