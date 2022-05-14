@@ -4,6 +4,13 @@
 import mongoose from "mongoose";
 import PostMessage from "../models/postMessage.js";
 
+function sanitizeString(str) {
+    if (typeof str === "string") {
+        str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
+        return str.trim();
+    } else return "Hacker error 12390911884355";
+}
+
 //We use async because we used await
 export const getPosts = async (req, res) => {
     const { page } = req.query;
@@ -44,7 +51,21 @@ export const getPost = async (req, res) => {
 export const getPostsBySearch = async (req, res) => {
     //params are used for links like /:id
     //query is used for links like /dsa?asd
-    const { searchQuery, tags } = req.query;
+    const LIMIT = 8;
+    const searchQuery = sanitizeString(req.query.searchQuery).substring(0, 30);
+    let tags = sanitizeString(req.query.tags);
+
+    //Whenever there are no tags mongodb returns all the posts
+    //Therefore we assign a custom tag that returns no tags
+    //There are other ways to deal with it but i like this approach
+    //Because it is very simple to understand and it speaks for itself
+    if (!tags) {
+        tags = "The user have no tags in input";
+    }
+
+    console.log("Tags " + tags);
+    console.log("Search " + searchQuery);
+
     try {
         //We converted into regularExp because it makes easier to search for mongodb
         //Here i just mean ignore punctuation meaning t=T and etc
@@ -53,8 +74,11 @@ export const getPostsBySearch = async (req, res) => {
         //$or means any one of them title or tags
         //$in means having any of these tags that i passed as an array
         const posts = await PostMessage.find({
-            $or: [{ title }, { tags: { $in: tags.split(",") } }],
-        });
+            $or: [
+                { title },
+                { tags: { $in: new RegExp(tags.split(","), "i") } },
+            ],
+        }).limit(LIMIT);
 
         res.status(200).json({ data: posts });
     } catch (error) {

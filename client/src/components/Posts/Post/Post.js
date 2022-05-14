@@ -86,7 +86,7 @@ const Post = ({ post, setCurrentId }) => {
 
     return (
         <Card className={`${classes.card}`} raised elevation={6}>
-            <CardActionArea className={classes.cardAction} onClick={openPost}>
+            <CardActionArea onClick={openPost}>
                 <CardMedia
                     className={classes.media}
                     image={post.selectedFile}
@@ -121,7 +121,9 @@ const Post = ({ post, setCurrentId }) => {
                         color="textSecondary"
                         component="p"
                     >
-                        {post.message}
+                        {post.message.length > 250
+                            ? post.message.substring(0, 250) + "..."
+                            : post.message}
                     </Typography>
                 </CardContent>
             </CardActionArea>

@@ -91,7 +91,15 @@ const PostDetails = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                    <div>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "100%",
+                            width: "100%",
+                        }}
+                    >
                         <img
                             className={classes.media}
                             src={

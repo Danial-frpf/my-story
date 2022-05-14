@@ -48,10 +48,4 @@ export default makeStyles({
         display: "flex",
         justifyContent: "space-between",
     },
-    cardAction: {
-        "&:hover $focusHighlight": {
-            opacity: 1,
-        },
-    },
-    focusHighlight: {},
 });

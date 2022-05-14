@@ -11,7 +11,7 @@ import Auth from "./components/Auth/Auth.js";
 import PostDetails from "./components/PostDetails/PostDetails.js";
 
 const App = () => {
-    const user = JSON.parse(localStorage.getItem("profile"));
+    const user = () => JSON.parse(localStorage.getItem("profile"));
 
     return (
         //Container to center everything
@@ -37,7 +37,7 @@ const App = () => {
                         path="/auth"
                         exact
                         component={() =>
-                            !user ? <Auth /> : <Redirect to="/posts" />
+                            !user() ? <Auth /> : <Redirect to="/posts" />
                         }
                     />
                 </Switch>

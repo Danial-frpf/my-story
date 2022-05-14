@@ -54,7 +54,7 @@ const Home = () => {
         }
     };
 
-    const handleAdd = (tag) => setTags([...tags, tag]);
+    const handleAdd = (tag) => setTags([...tags, tag.replace(/ /g, "")]);
     const handleDelete = (tagToDelete) =>
         setTags(tags.filter((tag) => tag !== tagToDelete));
 
@@ -97,6 +97,7 @@ const Home = () => {
                                 label="Search Stories"
                                 fullWidth
                                 onKeyPress={handleKeyPress}
+                                inputProps={{ maxLength: 30 }}
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />

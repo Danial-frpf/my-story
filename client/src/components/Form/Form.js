@@ -112,6 +112,7 @@ const Form = ({ currentId, setCurrentId }) => {
                     fullWidth
                     multiline
                     minRows={4}
+                    maxRows={10}
                     value={postData.message}
                     onChange={(e) =>
                         setPostData({ ...postData, message: e.target.value })
