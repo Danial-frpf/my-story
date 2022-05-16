@@ -39,21 +39,71 @@ body {
 
 }
 
-.grad--black{
+.scaleAnimation {
+    transition: transform .1s ease-in-out;
+}
 
-    /* ff 3.6+ */
-    background:-moz-radial-gradient(ellipse at 6% 0%, rgba(55, 63, 70, 1) 0%, rgba(14, 14, 16, 1) 100%);
+.scaleAnimation:hover {
+    transform: scale(1.05);
+}
 
-    /* safari 5.1+,chrome 10+ */
-    background:-webkit-radial-gradient(ellipse at 6% 0%, rgba(55, 63, 70, 1) 0%, rgba(14, 14, 16, 1) 100%);
+.tracking-in-expand {
+	-webkit-animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+	animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+}
 
-    /* opera 11.10+ */
-    background:-o-radial-gradient(ellipse at 6% 0%, rgba(55, 63, 70, 1) 0%, rgba(14, 14, 16, 1) 100%);
+@-webkit-keyframes tracking-in-expand {
+    0% {
+      letter-spacing: -0.5em;
+      opacity: 0;
+    }
+    40% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes tracking-in-expand {
+    0% {
+      letter-spacing: -0.5em;
+      opacity: 0;
+    }
+    40% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
 
-    /* ie 10+ */
-    background:-ms-radial-gradient(ellipse at 6% 0%, rgba(55, 63, 70, 1) 0%, rgba(14, 14, 16, 1) 100%);
+  .scale-in-center {
+    -webkit-animation: scale-in-center 0.25s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            animation: scale-in-center 0.25s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
 
-    /* global 92%+ browsers support */
-    background:radial-gradient(ellipse at 6% 0%, rgba(55, 63, 70, 1) 0%, rgba(14, 14, 16, 1) 100%);
-
+@-webkit-keyframes scale-in-center {
+  0% {
+    -webkit-transform: scale(0.8);
+            transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes scale-in-center {
+  0% {
+    -webkit-transform: scale(0.8);
+            transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
 }

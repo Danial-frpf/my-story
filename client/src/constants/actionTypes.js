@@ -8,6 +8,8 @@ export const COMMENT = "COMMENT";
 
 export const START_LOADING = "START_LOADING";
 export const END_LOADING = "END_LOADING";
+export const START_LOADING_DETAILS = "START_LOADING_DETAILS";
+export const END_LOADING_DETAILS = "END_LOADING_DETAILS";
 
 export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";

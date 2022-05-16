@@ -26,8 +26,8 @@ const Paginate = ({ page }) => {
             count={numberOfPages}
             //Current page
             page={Number(page) || 1}
-            variant="outlined"
-            color="primary"
+            color="secondary"
+            shape="rounded"
             renderItem={(item) => (
                 <PaginationItem
                     {...item}

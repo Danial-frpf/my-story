@@ -1,7 +1,7 @@
 import React from "react";
 
 //Adding material components
-import { Grid, CircularProgress } from "@material-ui/core";
+import { Grid, CircularProgress, Typography, Box } from "@material-ui/core";
 
 //To access redux store we use use selector
 import { useSelector } from "react-redux";
@@ -19,7 +19,14 @@ const Posts = ({ setCurrentId }) => {
     //if you go to reducers index.js you can see that we have already specify posts
     const { posts, isLoading } = useSelector((state) => state.posts);
 
-    if (!posts.length && !isLoading) return "No posts";
+    if (!posts.length && !isLoading)
+        return (
+            <Box display="flex" justifyContent="center">
+                <Typography variant="h3" color="textSecondary">
+                    No Posts
+                </Typography>
+            </Box>
+        );
 
     return isLoading ? (
         <CircularProgress className={classes.progressBar} />

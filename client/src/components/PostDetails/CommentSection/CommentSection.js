@@ -5,15 +5,13 @@ import {
     Button,
     Card,
     CardContent,
+    Box,
 } from "@material-ui/core";
 
 import { useDispatch } from "react-redux";
-import useStyles from "./styles";
 import { postComment } from "../../../actions/posts";
 
 const CommentSection = ({ post }) => {
-    const classes = useStyles();
-
     const dispatch = useDispatch();
 
     const user = JSON.parse(localStorage.getItem("profile"));
@@ -33,11 +31,11 @@ const CommentSection = ({ post }) => {
 
     return (
         <div>
+            <Typography gutterBottom variant="h5" color="primary">
+                Comments
+            </Typography>
             {user?.result?.name && (
                 <div>
-                    <Typography gutterBottom variant="h5" color="primary">
-                        Comments
-                    </Typography>
                     <TextField
                         fullWidth
                         maxRows={4}
@@ -71,22 +69,49 @@ const CommentSection = ({ post }) => {
                 </div>
             )}
 
-            {comments.map((c, i) => (
-                <Card style={{ marginTop: "1rem" }} raised key={i}>
-                    <CardContent>
-                        <Typography
-                            gutterBottom
-                            variant="subtitle1"
-                            color="primary"
+            {comments.length === 0 ? (
+                <Box className="scaleAnimation">
+                    <Card
+                        className="scale-in-center"
+                        style={{ marginTop: "1rem" }}
+                        raised
+                    >
+                        <CardContent>
+                            <Typography
+                                gutterBottom
+                                variant="subtitle1"
+                                color="primary"
+                            >
+                                <strong>No Comments</strong>
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Box>
+            ) : (
+                comments.map((c, i) => (
+                    <Box className="scaleAnimation" key={i}>
+                        <Card
+                            className="scale-in-center"
+                            style={{ marginTop: "1rem" }}
+                            raised
                         >
-                            <strong>{c.split(": ")[0]}:</strong>
-                        </Typography>
-                        <Typography variant="subtitle1">
-                            {c.split(":")[1]}
-                        </Typography>
-                    </CardContent>
-                </Card>
-            ))}
+                            <CardContent>
+                                <Typography
+                                    gutterBottom
+                                    variant="subtitle1"
+                                    color="primary"
+                                >
+                                    <strong>{c.split(": ")[0]}:</strong>
+                                </Typography>
+                                <Typography variant="subtitle1">
+                                    {c.split(":")[1]}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Box>
+                ))
+            )}
+
             <div ref={commentsRef}></div>
         </div>
     );

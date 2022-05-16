@@ -10,6 +10,8 @@ import {
     END_LOADING,
     FETCH_POST,
     COMMENT,
+    START_LOADING_DETAILS,
+    END_LOADING_DETAILS,
 } from "../constants/actionTypes";
 //We always need to set an initial value for our state (posts)
 export default (state = { isLoading: true, posts: [] }, action) => {
@@ -67,6 +69,13 @@ export default (state = { isLoading: true, posts: [] }, action) => {
 
         case END_LOADING:
             return { ...state, isLoading: false };
+
+        case START_LOADING_DETAILS:
+            return { ...state, isLoadingDetails: true };
+
+        case END_LOADING_DETAILS:
+            return { ...state, isLoadingDetails: false };
+
         default:
             return state;
     }

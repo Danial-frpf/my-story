@@ -93,7 +93,7 @@ const Form = ({ currentId, setCurrentId }) => {
                 onSubmit={handleSubmit}
             >
                 <Typography variant="h6">
-                    {currentId ? "Editing" : "Creating"} a Story
+                    {currentId ? "Editing" : "Create a Story"}
                 </Typography>
                 <TextField
                     name="title"
@@ -101,6 +101,7 @@ const Form = ({ currentId, setCurrentId }) => {
                     label="Title"
                     fullWidth
                     value={postData.title}
+                    inputProps={{ maxLength: 30 }}
                     onChange={(e) =>
                         setPostData({ ...postData, title: e.target.value })
                     }
@@ -114,6 +115,7 @@ const Form = ({ currentId, setCurrentId }) => {
                     minRows={4}
                     maxRows={10}
                     value={postData.message}
+                    inputProps={{ maxLength: 500 }}
                     onChange={(e) =>
                         setPostData({ ...postData, message: e.target.value })
                     }
@@ -124,6 +126,7 @@ const Form = ({ currentId, setCurrentId }) => {
                     label="Tags (pretty,cute,small,...)"
                     fullWidth
                     value={postData.tags}
+                    inputProps={{ maxLength: 100 }}
                     onChange={(e) =>
                         setPostData({
                             ...postData,

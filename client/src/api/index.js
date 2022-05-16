@@ -2,7 +2,9 @@ import axios from "axios";
 
 //Creating axios instance
 //It will provide us some more functions
-const API = axios.create({ baseURL: "http://localhost:5000" });
+const API = axios.create({
+    baseURL: "https://mystorybackendserver.herokuapp.com/",
+});
 
 //This will happen before on each one of our request
 //It needs a call back function

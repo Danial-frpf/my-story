@@ -68,12 +68,12 @@ const Navbar = () => {
                             variant="h2"
                             align="center"
                         >
-                            Animories
+                            My Story
                         </Typography>
                         <img
                             className={classes.image}
                             src={memories}
-                            alt="memories"
+                            alt="My Story"
                             height="60"
                         />
                     </div>
@@ -94,7 +94,7 @@ const Navbar = () => {
                                     className={classes.userName}
                                     variant="h6"
                                 >
-                                    {user.result.name}
+                                    {user.result.name.substring(0, 30)}
                                 </Typography>
                             </div>
                             <Button

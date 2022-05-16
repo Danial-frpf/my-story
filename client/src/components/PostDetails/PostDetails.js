@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 
@@ -13,6 +13,8 @@ import {
     Card,
     CardActionArea,
     CardContent,
+    Button,
+    Box,
 } from "@material-ui/core";
 
 import useStyles from "./styles.js";
@@ -21,16 +23,19 @@ import CommentSection from "./CommentSection/CommentSection.js";
 
 const PostDetails = () => {
     const classes = useStyles();
-    const { post, posts, isLoading } = useSelector((state) => state.posts);
+    const [showMore, setShowMore] = useState(false);
+    const { post, posts, isLoadingDetails } = useSelector(
+        (state) => state.posts
+    );
     const dispatch = useDispatch();
     const history = useHistory();
     const { id } = useParams();
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         dispatch(getPost(id));
     }, [id, dispatch]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (post) {
             dispatch(
                 getPostsBySearch({ search: "none", tags: post.tags.join(",") })
@@ -38,9 +43,7 @@ const PostDetails = () => {
         }
     }, [dispatch, post]);
 
-    if (!post) return null;
-
-    if (isLoading) {
+    if (isLoadingDetails || !post) {
         return (
             <Paper className={classes.loadingPaper} elevation={6}>
                 <CircularProgress size="7em" />
@@ -73,12 +76,30 @@ const PostDetails = () => {
                         </div>
                         <div style={{ height: "100%" }}>
                             <Typography
+                                className="tracking-in-expand"
                                 gutterBottom
                                 variant="body1"
                                 component="p"
                             >
-                                {post.message}
+                                {showMore
+                                    ? post.message.trim()
+                                    : post.message.substring(0, 250)}
+                                {post.message.trim()}
                             </Typography>
+                            {post.message.length > 250 && (
+                                <Button
+                                    variant="contained"
+                                    size="small"
+                                    color="primary"
+                                    onClick={() => {
+                                        setShowMore(
+                                            (prevShowMore) => !prevShowMore
+                                        );
+                                    }}
+                                >
+                                    {showMore ? "Show Less" : "Show More"}
+                                </Button>
+                            )}
                         </div>
                         <div>
                             <Typography variant="h6">
@@ -114,7 +135,7 @@ const PostDetails = () => {
             <Divider style={{ margin: "20px 0" }} />
             {/* Recommended post logic */}
             {0 < recommendedPosts.length && (
-                <div>
+                <Box>
                     <Card>
                         <CardContent>
                             <Typography variant="h5" color="primary">
@@ -126,74 +147,87 @@ const PostDetails = () => {
                     <Divider style={{ margin: "20px 0" }} />
 
                     <Grid container spacing={1}>
-                        {recommendedPosts.map(
-                            ({
-                                title,
-                                tags,
-                                name,
-                                likes,
-                                selectedFile,
-                                _id,
-                            }) => (
-                                <Grid
-                                    item
-                                    xs={12}
-                                    sm={6}
-                                    md={3}
-                                    lg={3}
-                                    xl={3}
-                                    key={_id}
-                                >
-                                    <Card raised elevation={6}>
-                                        <CardActionArea
-                                            onClick={() => openPost(_id)}
-                                        >
-                                            <CardContent>
-                                                <Typography
-                                                    gutterBottom
-                                                    variant="h5"
+                        {recommendedPosts
+                            .slice(0, 4)
+                            .map(
+                                ({
+                                    title,
+                                    tags,
+                                    name,
+                                    likes,
+                                    selectedFile,
+                                    _id,
+                                }) => (
+                                    <Grid
+                                        item
+                                        xs={12}
+                                        sm={6}
+                                        md={3}
+                                        lg={3}
+                                        xl={3}
+                                        key={_id}
+                                    >
+                                        <Box className="scaleAnimation">
+                                            <Card
+                                                className="scale-in-center"
+                                                raised
+                                                elevation={6}
+                                            >
+                                                <CardActionArea
+                                                    onClick={() =>
+                                                        openPost(_id)
+                                                    }
                                                 >
-                                                    {title}
-                                                </Typography>
-                                                <Typography
-                                                    gutterBottom
-                                                    variant="h6"
-                                                >
-                                                    {name}
-                                                </Typography>
-                                                <Typography
-                                                    gutterBottom
-                                                    variant="subtitle2"
-                                                    color="textSecondary"
-                                                >
-                                                    {post.tags.map(
-                                                        (tag) => `#${tag} `
-                                                    )}
-                                                </Typography>
-                                                <Typography
-                                                    gutterBottom
-                                                    variant="subtitle2"
-                                                    color="primary"
-                                                >
-                                                    Likes: {likes.length}
-                                                </Typography>
-                                                <img
-                                                    src={selectedFile}
-                                                    style={{
-                                                        objectFit: "cover",
-                                                        height: "25vh",
-                                                    }}
-                                                    width="100%"
-                                                    alt="Recommendation images"
-                                                />
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </Card>
-                                </Grid>
-                            )
-                        )}
+                                                    <CardContent>
+                                                        <Typography
+                                                            gutterBottom
+                                                            variant="h5"
+                                                        >
+                                                            {title}
+                                                        </Typography>
+                                                        <Typography
+                                                            gutterBottom
+                                                            variant="h6"
+                                                        >
+                                                            {name}
+                                                        </Typography>
+                                                        <Typography
+                                                            gutterBottom
+                                                            variant="subtitle2"
+                                                            color="textSecondary"
+                                                        >
+                                                            {post.tags.map(
+                                                                (tag) =>
+                                                                    `#${tag} `
+                                                            )}
+                                                        </Typography>
+                                                        <Typography
+                                                            gutterBottom
+                                                            variant="subtitle2"
+                                                            color="primary"
+                                                        >
+                                                            Likes:{" "}
+                                                            {likes.length}
+                                                        </Typography>
+                                                        <img
+                                                            src={selectedFile}
+                                                            style={{
+                                                                objectFit:
+                                                                    "cover",
+                                                                height: "25vh",
+                                                            }}
+                                                            width="100%"
+                                                            alt="Recommendation images"
+                                                        />
+                                                    </CardContent>
+                                                </CardActionArea>
+                                            </Card>
+                                        </Box>
+                                    </Grid>
+                                )
+                            )}
                     </Grid>
-                </div>
+                </Box>
             )}
             <Divider style={{ margin: "20px 0" }} />
             <CommentSection post={post} />

@@ -9,6 +9,8 @@ import {
     END_LOADING,
     FETCH_POST,
     COMMENT,
+    START_LOADING_DETAILS,
+    END_LOADING_DETAILS,
 } from "../constants/actionTypes";
 
 //Action creators--Functions that returns actions
@@ -17,12 +19,12 @@ import {
 
 export const getPost = (id) => async (dispatch) => {
     try {
-        dispatch({ type: START_LOADING });
+        dispatch({ type: START_LOADING_DETAILS });
 
         const { data } = await api.fetchPost(id);
         dispatch({ type: FETCH_POST, payload: data });
 
-        dispatch({ type: END_LOADING });
+        dispatch({ type: END_LOADING_DETAILS });
     } catch (error) {
         console.log(error);
     }

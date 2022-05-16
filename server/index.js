@@ -28,6 +28,10 @@ app.use("/posts", postRoutes);
 //Auth Routes
 app.use("/user", userRoutes);
 
+app.get("/", (req, res) => {
+    res.send("APP IS RUNNING");
+});
+
 //Creating connection to mongodb by copying the link got from "connect application" and providing username and password of the created user in placeholders
 //It is now in .env file
 //Later on we are going to change this
@@ -37,11 +41,11 @@ const PORT = process.env.PORT || 5000;
 //Removed options as they are no longer necessary
 //Because its a promise we need to pass then that will run the passed function on success else we wil console the error using catch
 mongoose
-  .connect(process.env.CONNECTION_URL)
-  .then(() =>
-    app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
-  )
-  .catch((error) => console.log(error.message));
+    .connect(process.env.CONNECTION_URL)
+    .then(() =>
+        app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
+    )
+    .catch((error) => console.log(error.message));
 
 //Making sure not to get any warnings in console
 //mongoose.set("useFindAndModify", false);

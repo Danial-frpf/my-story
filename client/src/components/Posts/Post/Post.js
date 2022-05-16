@@ -9,6 +9,7 @@ import {
     Button,
     Typography,
     CardActionArea,
+    Box,
 } from "@material-ui/core";
 
 //Moment is a nice time display library
@@ -85,80 +86,91 @@ const Post = ({ post, setCurrentId }) => {
     };
 
     return (
-        <Card className={`${classes.card}`} raised elevation={6}>
-            <CardActionArea onClick={openPost}>
-                <CardMedia
-                    className={classes.media}
-                    image={post.selectedFile}
-                    title={post.title}
-                />
-                <div className={classes.overlay}>
-                    <Typography variant="h6">{post.name}</Typography>
-                    <Typography variant="body2">
-                        {moment(post.createdAt).fromNow()}
-                    </Typography>
-                </div>
-                <div className={classes.details}>
-                    <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="h2"
-                    >
-                        {post.tags.map((tag) => `#${tag} `)}
-                    </Typography>
-                </div>
-                <Typography
-                    className={classes.title}
-                    variant="h5"
-                    component="p"
-                    gutterBottom
-                >
-                    {post.title}
-                </Typography>
-                <CardContent>
-                    <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                    >
-                        {post.message.length > 250
-                            ? post.message.substring(0, 250) + "..."
-                            : post.message}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions className={classes.cardActions}>
-                <Button
-                    size="small"
-                    color="primary"
-                    disabled={!user?.result}
-                    onClick={handleLike}
-                >
-                    <Likes />
-                </Button>
-                {(user?.result?.googleId === post?.creator ||
-                    user?.result?._id === post?.creator) && (
-                    <div style={{ flexDirection: "row" }}>
-                        <Button
-                            color="primary"
-                            size="small"
-                            onClick={() => setCurrentId(post._id)}
-                        >
-                            <EditIcon fontSize="small" />
-                            Edit
-                        </Button>
-                        <Button
-                            size="small"
-                            color="primary"
-                            onClick={() => dispatch(deletePost(post._id))}
-                        >
-                            <DeleteIcon fontSize="small" />
-                            Delete
-                        </Button>
+        <Box className="scaleAnimation" height="100%">
+            <Card
+                className={`scale-in-center ${classes.card}`}
+                raised
+                elevation={6}
+            >
+                <CardActionArea onClick={openPost}>
+                    <CardMedia
+                        className={classes.media}
+                        image={
+                            post.selectedFile ||
+                            "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"
+                        }
+                        title={post.title}
+                    />
+                    <div className={classes.overlay}>
+                        <Typography variant="h6">
+                            {post.name.substring(0, 30)}
+                        </Typography>
+                        <Typography variant="body2">
+                            {moment(post.createdAt).fromNow()}
+                        </Typography>
                     </div>
-                )}
-            </CardActions>
-        </Card>
+                    <div className={classes.details}>
+                        <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="h2"
+                        >
+                            {post.tags.map((tag) => `#${tag} `)}
+                        </Typography>
+                    </div>
+                    <Typography
+                        className={classes.title}
+                        variant="h5"
+                        component="p"
+                        gutterBottom
+                    >
+                        {post.title.substring(0, 30)}
+                    </Typography>
+                    <CardContent>
+                        <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                        >
+                            {post.message.length > 250
+                                ? post.message.substring(0, 250) + "..."
+                                : post.message}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+                <CardActions className={classes.cardActions}>
+                    <Button
+                        size="small"
+                        color="primary"
+                        disabled={!user?.result}
+                        onClick={handleLike}
+                    >
+                        <Likes />
+                    </Button>
+                    {(user?.result?.googleId === post?.creator ||
+                        user?.result?._id === post?.creator) && (
+                        <div style={{ flexDirection: "row" }}>
+                            <Button
+                                color="primary"
+                                size="small"
+                                onClick={() => setCurrentId(post._id)}
+                            >
+                                <EditIcon fontSize="small" />
+                                Edit
+                            </Button>
+                            <Button
+                                size="small"
+                                color="primary"
+                                onClick={() => dispatch(deletePost(post._id))}
+                            >
+                                <DeleteIcon fontSize="small" />
+                                Delete
+                            </Button>
+                        </div>
+                    )}
+                </CardActions>
+            </Card>
+        </Box>
     );
 };
 

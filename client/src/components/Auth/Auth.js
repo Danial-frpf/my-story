@@ -39,6 +39,7 @@ const Auth = () => {
     const history = useHistory();
 
     const [showPassword, setShowPassword] = useState(false);
+    const [confirmPasswordFlag, setConfirmPasswordFlag] = useState(false);
 
     //Mock variable
     const [isSignUp, setIsSignUp] = useState(false);
@@ -63,7 +64,19 @@ const Auth = () => {
     const handleChange = (e) => {
         //Because our field structure and input field names are exactly the same
         //We use the following to spread the value to its specific name
+
         setFormData({ ...formData, [e.target.name]: e.target.value });
+
+        if (
+            e.target.name === "confirmPassword" ||
+            e.target.name === "password"
+        ) {
+            if (e.target.value === formData.password) {
+                setConfirmPasswordFlag((p) => false);
+            } else {
+                setConfirmPasswordFlag((p) => true);
+            }
+        }
     };
 
     const handleShowPassword = () =>
@@ -72,6 +85,15 @@ const Auth = () => {
     const switchMode = () => {
         setIsSignUp((prevIsSignUp) => !prevIsSignUp);
         setShowPassword(false);
+    };
+
+    //Setting up demo login
+    const handleDemoLogin = () => {
+        setFormData({
+            ...formData,
+            email: "justPressTheSignInButton@mystory.com",
+            password: "itsasecret",
+        });
     };
 
     //Yes it gives us access to a complete response
@@ -110,14 +132,15 @@ const Auth = () => {
                                     name="firstName"
                                     label="First Name"
                                     handleChange={handleChange}
+                                    value={formData.firstName}
                                     autoFocus
                                     half
                                 />
                                 <Input
                                     name="lastName"
                                     label="Last Name"
+                                    value={formData.lastName}
                                     handleChange={handleChange}
-                                    autoFocus
                                     half
                                 />
                             </>
@@ -126,22 +149,35 @@ const Auth = () => {
                             name="email"
                             label="Email Address"
                             handleChange={handleChange}
+                            value={formData.email}
                             type="email"
                         />
                         <Input
                             name="password"
                             label="Password"
                             handleChange={handleChange}
+                            value={formData.password}
                             type={showPassword ? "text" : "password"}
                             handleShowPassword={handleShowPassword}
                         />
                         {isSignUp && (
-                            <Input
-                                name="confirmPassword"
-                                label="Repeat Password"
-                                handleChange={handleChange}
-                                type="password"
-                            />
+                            <>
+                                <Input
+                                    name="confirmPassword"
+                                    label="Repeat Password"
+                                    handleChange={handleChange}
+                                    value={formData.confirmPassword}
+                                    type="password"
+                                />
+                                {confirmPasswordFlag && (
+                                    <Typography
+                                        style={{ color: "red", width: "100%" }}
+                                        align="center"
+                                    >
+                                        Password not matching
+                                    </Typography>
+                                )}
+                            </>
                         )}
                     </Grid>
 
@@ -153,6 +189,16 @@ const Auth = () => {
                         color="primary"
                     >
                         {isSignUp ? "Sign Up" : "Sign In"}
+                    </Button>
+
+                    <Button
+                        className={classes.demoButton}
+                        onClick={handleDemoLogin}
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                    >
+                        Demo Login
                     </Button>
 
                     <GoogleLogin

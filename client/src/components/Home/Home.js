@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
 //Adding material components
@@ -36,8 +36,10 @@ const Home = () => {
     const query = useQuery();
     const history = useHistory();
     const page = query.get("page") || 1;
-    const [tags, setTags] = useState([]);
-    const [search, setSearch] = useState("");
+    const searchQuery = query.get("searchQuery");
+    const tagsQuery = query.get("tags");
+    const [tags, setTags] = useState(tagsQuery ? tagsQuery.split(",") : []);
+    const [search, setSearch] = useState(searchQuery ? searchQuery : "");
 
     //Initializing id state
     const [currentId, setCurrentId] = useState(null);
@@ -54,7 +56,8 @@ const Home = () => {
         }
     };
 
-    const handleAdd = (tag) => setTags([...tags, tag.replace(/ /g, "")]);
+    const handleAdd = (tag) =>
+        setTags([...tags, tag.replace(/ /g, "").substring(0, 30)]);
     const handleDelete = (tagToDelete) =>
         setTags(tags.filter((tag) => tag !== tagToDelete));
 
@@ -71,6 +74,16 @@ const Home = () => {
             history.push("/");
         }
     };
+
+    //If a searchQuery exists it will search and return that
+    useEffect(() => {
+        if (searchQuery || tagsQuery) {
+            console.log(searchQuery);
+            dispatch(
+                getPostsBySearch({ search: searchQuery, tags: tagsQuery })
+            );
+        }
+    }, [searchQuery, tagsQuery, dispatch]);
 
     return (
         <Grow in>
@@ -122,9 +135,11 @@ const Home = () => {
                             currentId={currentId}
                             setCurrentId={setCurrentId}
                         />
-                        <Paper elevation={6}>
-                            <Pagination page={page} />
-                        </Paper>
+                        {!searchQuery && !tags.length && (
+                            <Paper elevation={6}>
+                                <Pagination page={page} />
+                            </Paper>
+                        )}
                     </Grid>
                 </Grid>
             </Container>
