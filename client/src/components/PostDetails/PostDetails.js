@@ -83,10 +83,12 @@ const PostDetails = () => {
                             >
                                 {showMore
                                     ? post.message.trim()
-                                    : post.message.substring(0, 250)}
-                                {post.message.trim()}
+                                    : post.message.substring(0, 750)}
+                                {post.message.length > 750 &&
+                                    !showMore &&
+                                    "..."}
                             </Typography>
-                            {post.message.length > 250 && (
+                            {post.message.length > 750 && (
                                 <Button
                                     variant="contained"
                                     size="small"

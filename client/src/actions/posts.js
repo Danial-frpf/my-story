@@ -26,7 +26,7 @@ export const getPost = (id) => async (dispatch) => {
 
         dispatch({ type: END_LOADING_DETAILS });
     } catch (error) {
-        console.log(error);
+        alert("Was not able to get post. Please refresh the page");
     }
 };
 
@@ -39,7 +39,7 @@ export const getPosts = (page) => async (dispatch) => {
 
         dispatch({ type: END_LOADING });
     } catch (error) {
-        console.log(error);
+        alert("Was not able to get posts. Please refresh the page");
     }
 };
 
@@ -56,7 +56,7 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
 
         dispatch({ type: END_LOADING });
     } catch (error) {
-        console.log(error);
+        alert("Was not able to get search result. Please search again");
     }
 };
 
@@ -73,7 +73,7 @@ export const createPost = (post, history) => async (dispatch) => {
 
         dispatch({ type: CREATE, payload: data });
     } catch (error) {
-        console.log(error);
+        alert("Was not able to create post.Try again later");
     }
 };
 
@@ -83,7 +83,7 @@ export const updatePost = (id, post) => async (dispatch) => {
 
         dispatch({ type: UPDATE, payload: data });
     } catch (error) {
-        console.log(error);
+        alert("Was not able to update post.Try again later");
     }
 };
 
@@ -93,7 +93,7 @@ export const deletePost = (id) => async (dispatch) => {
         await api.deletePost(id);
         dispatch({ type: DELETE, payload: id });
     } catch (error) {
-        console.log(error);
+        alert("Was not able to delete post.Try again later");
     }
 };
 

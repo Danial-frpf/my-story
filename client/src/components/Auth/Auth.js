@@ -112,7 +112,7 @@ const Auth = () => {
         }
     };
     const googleFailure = () => {
-        console.log("Google sign in failed. Try again later");
+        alert("Google sign in failed. Try again later");
     };
 
     return (
@@ -191,15 +191,17 @@ const Auth = () => {
                         {isSignUp ? "Sign Up" : "Sign In"}
                     </Button>
 
-                    <Button
-                        className={classes.demoButton}
-                        onClick={handleDemoLogin}
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                    >
-                        Demo Login
-                    </Button>
+                    {!isSignUp && (
+                        <Button
+                            className={classes.demoButton}
+                            onClick={handleDemoLogin}
+                            fullWidth
+                            variant="contained"
+                            color="secondary"
+                        >
+                            Demo Email & Password
+                        </Button>
+                    )}
 
                     <GoogleLogin
                         clientId="1044575846112-ltftsk9s2mhl39gkj98d9rlr9fjq0pg8.apps.googleusercontent.com"

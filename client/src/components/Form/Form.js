@@ -115,7 +115,7 @@ const Form = ({ currentId, setCurrentId }) => {
                     minRows={4}
                     maxRows={10}
                     value={postData.message}
-                    inputProps={{ maxLength: 500 }}
+                    inputProps={{ maxLength: 2000 }}
                     onChange={(e) =>
                         setPostData({ ...postData, message: e.target.value })
                     }
