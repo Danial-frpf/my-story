@@ -4,7 +4,7 @@ My Story is a social media web app where people can share stories of their journ
 
 ## Site link:
 
-Visit the site using the link https://my-stories-349015.web.app
+Visit the site using this link https://my-stories-349015.web.app
 
 ## Installation
 
